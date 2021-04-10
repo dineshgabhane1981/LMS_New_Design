@@ -1,7 +1,7 @@
 ﻿@model List<LMSBL.DBModels.HomeModel>
 @{
     ViewBag.Title = "My Learning";
-    Layout = "~/Views/Shared/_LayoutNew.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 
     LMSBL.DBModels.TblUser objUser = new LMSBL.DBModels.TblUser();
     objUser = (LMSBL.DBModels.TblUser)Session["UserSession"];

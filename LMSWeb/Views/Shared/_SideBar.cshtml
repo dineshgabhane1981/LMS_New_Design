@@ -1,0 +1,52 @@
+﻿@{ 
+    LMSBL.DBModels.TblUser model = new LMSBL.DBModels.TblUser();
+    model = (LMSBL.DBModels.TblUser)Session["UserSession"];
+    if (model == null)
+    {
+        Response.Redirect(Url.Action("Logout", "Login", null));
+    }
+    var baseURL = model.TenantURL;
+    var logo = "https://" + baseURL + "/assets/images/Logiciel_Logo.png";
+    if (!string.IsNullOrEmpty(model.TenantLogo))
+    {
+        logo = model.TenantLogo;
+    } 
+    
+ }
+
+<div class="sidebar" data-color="purple" data-background-color="white" data-image="../assets/assets/img/sidebar-1.jpg">   
+    <div class="logo">
+        <img src="@logo" width="246" height="61">
+    </div>
+
+    <div class="sidebar-wrapper">
+
+        @if (model.RoleId == 3)
+        {
+            <ul class="nav">
+                <li class="nav-item @Html.IsSelected(controller: "Home", action: "Index")  ">
+                    <a class="nav-link" href="@Url.Action("Index", "Home")">
+                        <i class="material-icons">dashboard</i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+
+                <li class="nav-item @Html.IsSelected(controller:"Assignment",action: "MyAssignments")">
+                    <a class="nav-link" href="@Url.Action("MyAssignments", "Assignment")">
+                        <i class="material-icons">content_paste</i>
+                        <p>My Learning</p>
+                    </a>
+                </li>
+
+                <li class="nav-item @Html.IsSelected(controller:"Reports",action: "Index,DetailReport,AttemptReport")">
+                    <a class="nav-link" href="@Url.Action("Index", "Reports")">
+                        <i class="material-icons">library_books</i>
+                        <p>Reports</p>
+                    </a>
+                </li>
+            </ul>
+        
+        }
+
+    </div>
+</div>

@@ -1125,6 +1125,10 @@
     <Content Include="Views\Assignment\LaunchCurriculum.cshtml" />
     <Content Include="Views\Shared\_LayoutCRM.cshtml" />
     <Content Include="Views\Emails\Index.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\_SideBar.cshtml" />
+    <Content Include="Views\Shared\_Header.cshtml" />
+    <Content Include="Views\Shared\_Footer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

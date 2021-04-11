@@ -41,124 +41,181 @@
         font-size: 30px;
         color: #fff;
     }
+
+    .onhover:hover {
+        background-color: lightgray;
+    }
 </style>
 <div class="container-fluid mb-4 pl-4 pr-4">
 
 
     @if (Model != null)
     {
-        
+
         var index = 0;
         var durationInSeconds = 0;
         var duration = "0";
+
         <div class="row">
             @foreach (var activity in Model)
+            {
+                index++;
+                var activityURL = "#";
+                if (!string.IsNullOrEmpty(activity.ActivityDuration) && activity.ActivityDuration != "0")
                 {
-                    index++;
-                    if (!string.IsNullOrEmpty(activity.ActivityDuration) && activity.ActivityDuration != "0")
+                    if (Convert.ToInt32(activity.ActivityDuration) >= 60)
                     {
-                        if (Convert.ToInt32(activity.ActivityDuration) >= 60)
-                        {
-                            duration = activity.ActivityDuration + ":00 Min";
-                        }
-                        else
-                        {
-                            durationInSeconds = Convert.ToInt32(activity.ActivityDuration) * 60;
-                            TimeSpan t = TimeSpan.FromSeconds(durationInSeconds);
-                            duration = string.Format("{0:D2}:{1:D2}", (int)t.Minutes, t.Seconds);
-                            duration = duration + " Min";
-                        }
+                        duration = activity.ActivityDuration + ":00 Min";
                     }
                     else
                     {
-                        duration = "-";
+                        durationInSeconds = Convert.ToInt32(activity.ActivityDuration) * 60;
+                        TimeSpan t = TimeSpan.FromSeconds(durationInSeconds);
+                        duration = string.Format("{0:D2}:{1:D2}", (int)t.Minutes, t.Seconds);
+                        duration = duration + " Min";
+                    }
+                }
+                else
+                {
+                    duration = "-";
+                }
+
+                var classColor = "card-header-danger";
+                if (activity.ActivityStatus == "Completed")
+                {
+                    classColor = "card-header-success";
+                }
+                if (activity.ActivityStatus == "InProgress")
+                {
+                    classColor = "card-header-warning";
+                }
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                    @if (activity.ActivityType == "Course")
+                    {
+                        if (activity.ActivitySubType == "Scorm1.2")
+                        {
+                            activityURL = Url.Action("LaunchCourse", "Assignment", new { CourseId = activity.ActivityId });
+
+                        }
+                        else if (activity.ActivitySubType == "Other")
+                        {
+                            activityURL = @CourseOtherBaseURL + "\\ContentModules\\" + @activity.ActivityId + "" + @activity.ActivityURL;
+
+                        }
                     }
 
-                <div class="col-lg-4 col-md-4 col-sm-6">
-                    <div class="course-badge" style="border:1px solid gray;box-shadow:3px 3px 3px 3px lightgray;margin-bottom:20px;">
-                        <div id="container" style="width:100%; height:150px;">
-                            <img src="~/assets/BodyImages/5.jpeg" id="img1" style="width:100%; height:150px;" />
+                    @if (activity.ActivityType == "Quiz")
+                    {
+                        activityURL = Url.Action("LaunchQuiz", "Assignment", new { QuizId = activity.ActivityId });
+
+                    }
+                    @if (activity.ActivityType == "Curriculum")
+                    {
+                        activityURL = Url.Action("LaunchCurriculum", "Assignment", new { cId = activity.ActivityId });
+                    }
+
+
+                    <a href="@activityURL">
+                        <div class="card card-stats onhover">
+
                             @if (activity.ActivityType == "Course")
                             {
-                                <img src="~/assets/images/course.svg" width="150px" id="img2" /> <div id="text1">COURSE</div>
+                                <div class="card-header @classColor card-header-icon">
+                                    <div class="card-icon" style="padding:3px !important;">
+                                        <i class="material-icons">local_library</i>
+                                    </div>
+                                    <p class="card-category" style="font-weight:bold;">Course</p>
+                                    <h4 class="card-title">
+                                        @if (activity.ActivityStatus == "Completed")
+                                        {
+                                            <span style="color:green; font-weight:bold;"> @activity.ActivityStatus</span>
+                                        }
+                                        @if (activity.ActivityStatus == "Not Started")
+                                        {
+                                            <span style="color:red; font-weight:bold;"> @activity.ActivityStatus</span>
+                                        }
+                                        @if (activity.ActivityStatus == "InProgress")
+                                        {
+                                            <span style="color:orange; font-weight:bold;"> @activity.ActivityStatus</span>
+                                        }
+
+                                    </h4>
+                                </div>
                             }
                             @if (activity.ActivityType == "Quiz")
                             {
-                                <img src="~/assets/images/quiz.svg" width="150px" id="img2" /><div id="text2">QUIZ</div>
+                                <div class="card-header @classColor card-header-icon">
+                                    <div class="card-icon" style="padding:3px !important;">
+                                        <i class="material-icons">quiz</i>
+                                    </div>
+                                    <p class="card-category" style="font-weight:bold;">Quiz</p>
+                                    <h4 class="card-title">
+                                        @if (activity.ActivityStatus == "Completed")
+                                        {
+                                            <span style="color:green; font-weight:bold;"> @activity.ActivityStatus</span>
+                                        }
+                                        @if (activity.ActivityStatus == "Not Started")
+                                        {
+                                            <span style="color:red; font-weight:bold;"> @activity.ActivityStatus</span>
+                                        }
+                                        @if (activity.ActivityStatus == "InProgress")
+                                        {
+                                            <span style="color:orange; font-weight:bold;"> @activity.ActivityStatus</span>
+                                        }
+
+                                    </h4>
+                                </div>
                             }
                             @if (activity.ActivityType == "Curriculum")
                             {
-                                <img src="~/assets/images/curriculum.svg" width="150px" id="img2" /><div id="text3">CURRICULUM</div>
-                            }
+                                <div class="card-header @classColor card-header-icon">
+                                    <div class="card-icon" style="padding:3px !important;">
+                                        <i class="material-icons">checklist</i>
+                                    </div>
+                                    <p class="card-category" style="font-weight:bold;">Curriculum</p>
+                                    <h4 class="card-title">
+                                        @if (activity.ActivityStatus == "Completed")
+                                        {
+                                            <span style="color:green; font-weight:bold;"> @activity.ActivityStatus</span>
+                                        }
+                                        @if (activity.ActivityStatus == "Not Started")
+                                        {
+                                            <span style="color:red; font-weight:bold;"> @activity.ActivityStatus</span>
+                                        }
+                                        @if (activity.ActivityStatus == "InProgress")
+                                        {
+                                            <span style="color:orange; font-weight:bold;"> @activity.ActivityStatus</span>
+                                        }
 
-                        </div>
-
-                        <div class="add-column-padding" style="width:100%;margin-top:10px;"><b>Name </b> - @activity.ActivityName</div>
-                        @if (activity.ActivityType != "Curriculum")
-                        {
-                            <div class="mobile-hide add-column-padding"><b>Duration</b> - @duration</div>
-                        }
-                        else
-                        {
-                            <div class="mobile-hide add-column-padding" style="color:transparent;"><b>Duration</b> - @duration</div>
-                        }
-                        <div style="display:inline-block;width:100%;">
-                            @if (activity.ActivityType != "Forum")
-                            {
-                                <div class="mobile-hide add-column-padding" style="width:50%; float:left;">
-                                    <b>Status</b> -
-                                    @if (activity.ActivityStatus == "Completed")
-                                    {
-                                        <span style="color:green; font-weight:bold;">@activity.ActivityStatus</span>
-                                    }
-                                    @if (activity.ActivityStatus == "Not Started")
-                                    {
-                                        <span style="color:red; font-weight:bold;">@activity.ActivityStatus</span>
-                                    }
-                                    @if (activity.ActivityStatus == "InProgress")
-                                    {
-                                        <span style="color:orange; font-weight:bold;">@activity.ActivityStatus</span>
-                                    }
-
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="mobile-hide add-column-padding" style="width:50%; float:left;color:transparent;">
-                                    <b>Status</b> -<span style="color:orange; font-weight:bold;">@activity.ActivityStatus</span>
+                                    </h4>
                                 </div>
                             }
 
-                        <div style="width:50%; float:right;padding-left:150px;">
-                            @if (activity.ActivityType == "Course")
-                            {
-                                if (activity.ActivitySubType == "Scorm1.2")
-                                {
-                                    <a href="@Url.Action("LaunchCourse", "Assignment", new { CourseId = activity.ActivityId })" class="login" title="Launch Course" target="_blank"><img src="~/assets/images/launch.png" width="35px;" /></a>
-                                }
-                                if (activity.ActivitySubType == "Other")
-                                {
-                                    <a href="@CourseOtherBaseURL\ContentModules\@activity.ActivityId@activity.ActivityURL" class="login" title="Launch Course" target="_blank"><img src="~/assets/images/launch.png" width="35px;" /></a>
-                                }
-                            }
-                            @if (activity.ActivityType == "Quiz")
-                            {
-                                <a href="@Url.Action("LaunchQuiz", "Assignment", new { QuizId = activity.ActivityId })" class="login" title="Launch Quiz"><img src="~/assets/images/launch.png" width="35px;" /></a>
-                            }
-                            @if (activity.ActivityType == "Curriculum")
-                            {
-                                <a href="@Url.Action("LaunchCurriculum", "Assignment", new { cId = activity.ActivityId })" class="login" title="Launch Curriculum"><img src="~/assets/images/launch.png" width="35px;" /></a>
-                            }
-
-                            @if (index > 5)
-                            {
-                                break;
-                            }
-                        </div>
+                            <div class="card-footer" >
+                                <div class="stats" style="width:100%;">
+                                    <div style="width:50%;">@activity.ActivityName</div>
+                                    @if (activity.ActivityType != "Curriculum")
+                                    {
+                                        if (duration != "-")
+                                        {
+                                            <div style="width:50%; text-align:end;"><b>Duration</b> - @duration</div>
+                                        }
+                                        else
+                                        {
+                                            <div style="width:50%; text-align:end;"><b>Duration</b> - N/A</div>
+                                        }
+                                    }
+                                </div>
+                            </div>
                         </div>
 
-                    </div>
+                    </a>
+
                 </div>
+                if (index > 5)
+                {
+                    break;
+                }
             }
         </div>
     }

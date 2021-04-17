@@ -3,156 +3,189 @@
     ViewBag.Title = "Report";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<style>
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        margin-right: 0px;
+        margin-left: -15px;
+    }
+      
+</style>
 <div class="container-fluid mt-4 mb-4 pl-4 pr-4">
-    <div class="row mb-1">
+    @*<div class="row mb-1">
         <div class="col">
-            <h4 class="title-color">Activity Report</h4>
+            <h3 class="title-color"><b>Activity Report</b></h3>
         </div>
-    </div>
+    </div>*@
     <div class="pt-3 pl-3 pr-3 course-list-container list-box">
         <div class="row">
             <div class="col search-container">
-                <i class="fas fa-search"></i>
-                <input class="search-box" type="text" id="txtSearch" placeholder="Search activity..." />
+
+                <input class="form-control" type="text" id="txtSearch" placeholder="Search activity..." />
             </div>
 
             <div class="col text-right">
             </div>
         </div>
-        <div class="row mt-3" id="dvActivityData">
-            <div class="table-responsive">
-                <table class="table" id="activityTable">
-                    <thead>
-                        <tr>
-                            <th scope="col">Learning</th>
-                            <th scope="col">Type</th>
-                            <th scope="col" class="mobile-hide">Duration (Mins)</th>
-                            <th scope="col" class="mobile-hide">Attempted Date</th>
-                            <th scope="col" class="mobile-hide">Attempts</th>
-                            <th scope="col" class="mobile-hide">Score</th>
-                            <th scope="col" class="mobile-hide">Time Spent</th>
-                            <th scope="col" style="text-align:center;">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model != null)
-                        {
 
-                            if (Model.Count > 0)
-                            {
 
-                                foreach (var activity in Model)
-                                {
-                                    var score = "-";
-                                    <tr>
-                                        <td>@activity.ActivityName</td>
-                                        <td>@activity.ActivityType</td>
-                                        @if (activity.ActivityDuration == "0")
-                                        {
-                                            <td class="mobile-hide add-column-padding">-</td>
-                                        }
-                                        else
-                                        {
-                                            var durationInSeconds = Convert.ToInt32(activity.ActivityDuration) * 60;
-                                            TimeSpan t = TimeSpan.FromSeconds(durationInSeconds);
-                                            var duration = string.Format("{0:D2}:{1:D2}", (int)t.Minutes, t.Seconds);
-                                            <td class="mobile-hide add-column-padding">@duration</td>
-                                        }
-                                        @if (activity.ActivityAttemptedDate == "")
-                                        {
-                                            <td class="mobile-hide add-column-padding">-</td>
-                                        }
-                                        else
-                                        {
-                                            <td class="mobile-hide ">@activity.ActivityAttemptedDate</td>
-                                        }
-                                        <td class="mobile-hide add-column-padding">@activity.ActivityAttempts</td>
-                                        @if (activity.ActivityType == "Quiz")
-                                        {
-                                            if (!string.IsNullOrEmpty(activity.ActivityScore))
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header card-header-primary">
+                                <h4 class="card-title ">Activitywise Report</h4>
+                                <p class="card-category">Curriculum, Courses, Quiz</p>
+                            </div>
+                            <div class="card-body" id="dvActivityData">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-striped" id="activityTable">
+                                        <thead>
+                                            <tr>
+                                                <th style="font-weight:bold;" scope="col">Learning</th>
+                                                <th style="font-weight:bold;" scope="col">Type</th>
+                                                <th style="font-weight:bold; text-align:center;" scope="col" class="mobile-hide">Duration (Mins)</th>
+                                                <th style="font-weight:bold;" scope="col" class="mobile-hide">Attempted Date</th>
+                                                <th style="font-weight:bold;" scope="col" class="mobile-hide">Attempts</th>
+                                                <th style="font-weight:bold;" scope="col" class="mobile-hide">Score</th>
+                                                <th style="font-weight:bold; text-align:center;" scope="col" class="mobile-hide">Time Spent</th>
+                                                <th style="font-weight:bold; text-align:center;" scope="col">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (Model != null)
                                             {
-                                                score = Convert.ToString((Convert.ToInt32(activity.ActivityScore) * 100) / Convert.ToInt32(activity.ActivityQuestionCount)) + "%";
-                                            }
-                                        }
-                                        else if (activity.ActivityType == "Curriculum")
-                                        {
-                                            score = "-";
-                                        }
-                                        else
-                                        {
-                                            score = activity.ActivityScore + "%";
-                                        }
-                                        <td class="mobile-hide add-column-padding">@score</td>
 
-                                        @if (activity.ActivityType == "Course")
-                                        {
-                                            if (!string.IsNullOrEmpty(activity.ActivityCompletionTime) && activity.ActivityCompletionTime != "0")
-                                            {
-                                                <td class="add-column-padding mobile-hide">@activity.ActivityCompletionTime:00</td>
+                                                if (Model.Count > 0)
+                                                {
+
+                                                    foreach (var activity in Model)
+                                                    {
+                                                        var score = "-";
+                                                        <tr>
+                                                            <td>@activity.ActivityName</td>
+                                                            <td>@activity.ActivityType</td>
+                                                            @if (activity.ActivityDuration == "0")
+                                                            {
+                                                                <td style="text-align:center;" class="mobile-hide add-column-padding">-</td>
+                                                            }
+                                                            else
+                                                            {
+                                                                var durationInSeconds = Convert.ToInt32(activity.ActivityDuration) * 60;
+                                                                TimeSpan t = TimeSpan.FromSeconds(durationInSeconds);
+                                                                var duration = string.Format("{0:D2}:{1:D2}", (int)t.Minutes, t.Seconds);
+                                                                <td style="text-align:center;" class="mobile-hide add-column-padding">@duration</td>
+                                                            }
+                                                            @if (activity.ActivityAttemptedDate == "")
+                                                            {
+                                                                <td style="text-align:center;" class="mobile-hide add-column-padding">-</td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td class="mobile-hide">@activity.ActivityAttemptedDate</td>
+                                                            }
+                                                            @if (!string.IsNullOrEmpty(activity.ActivityAttempts))
+                                                            {
+                                                                <td style="text-align:center;" class="mobile-hide add-column-padding">@activity.ActivityAttempts</td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td style="text-align:center;" class="mobile-hide add-column-padding">-</td>
+                                                            }
+                                                            @if (activity.ActivityType == "Quiz")
+                                                            {
+                                                                if (!string.IsNullOrEmpty(activity.ActivityScore))
+                                                                {
+                                                                    score = Convert.ToString((Convert.ToInt32(activity.ActivityScore) * 100) / Convert.ToInt32(activity.ActivityQuestionCount)) + "%";
+                                                                }
+                                                            }
+                                                            else if (activity.ActivityType == "Curriculum")
+                                                            {
+                                                                score = "-";
+                                                            }
+                                                            else
+                                                            {
+                                                                score = activity.ActivityScore + "%";
+                                                            }
+                                                            <td style="text-align:center;" class="mobile-hide add-column-padding">@score</td>
+
+                                                            @if (activity.ActivityType == "Course")
+                                                            {
+                                                                if (!string.IsNullOrEmpty(activity.ActivityCompletionTime) && activity.ActivityCompletionTime != "0")
+                                                                {
+                                                                    <td style="text-align:center;" class="add-column-padding mobile-hide">@activity.ActivityCompletionTime:00</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td style="text-align:center;" class="add-column-padding mobile-hide">-</td>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                if (!string.IsNullOrEmpty(activity.ActivityCompletionTime))
+                                                                {
+                                                                    <td style="text-align:center;" class="add-column-padding mobile-hide">@activity.ActivityCompletionTime</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td style="text-align:center;" class="add-column-padding mobile-hide">-</td>
+                                                                }
+                                                            }
+                                                            @*<td class="mobile-hide add-column-padding">@activity.ActivityCompletionTime</td>*@
+                                                            @if (activity.ActivityType == "Quiz" && !string.IsNullOrEmpty(activity.ActivityAttempts))
+                                                            {
+                                                                <td style="text-align:center;"><a href="@Url.Action("DetailReport", "Reports", new { activityId = activity.ActivityId })" class="login" title="View Detail"><img src="~/assets/images/eye.png" /></a></td>
+                                                            }
+
+                                                            else if (activity.ActivityType == "Curriculum")
+                                                            {
+                                                                <td style="text-align:center;"><a href="@Url.Action("DetailReport", "Reports", new { activityId = activity.ActivityId, cId="C" })" class="login" title="View Detail"><img src="~/assets/images/eye.png" /></a></td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td style="text-align:center;">-</td>
+                                                            }
+                                                        </tr>
+
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <tr>
+                                                        <td colspan="8" align="center">No Activity Available</td>
+                                                    </tr>
+                                                }
                                             }
                                             else
                                             {
-                                                <td class="add-column-padding mobile-hide">-</td>
+                                                <tr>
+                                                    <td colspan="8">No Activity Available</td>
+                                                </tr>
                                             }
-                                        }
-                                        else
-                                        {
-                                            if (!string.IsNullOrEmpty(activity.ActivityCompletionTime))
-                                            {
-                                                <td class="add-column-padding mobile-hide">@activity.ActivityCompletionTime</td>
-                                            }
-                                            else
-                                            {
-                                                <td class="add-column-padding mobile-hide">-</td>
-                                            }
-                                        }
-                                        @*<td class="mobile-hide add-column-padding">@activity.ActivityCompletionTime</td>*@
-                                        @if (activity.ActivityType == "Quiz" && !string.IsNullOrEmpty(activity.ActivityAttempts))
-                                        {
-                                            <td style="text-align:center;"><a href="@Url.Action("DetailReport", "Reports", new { activityId = activity.ActivityId })" class="login" title="View Detail"><img src="~/assets/images/eye.png" /></a></td>
-                                        }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
 
-                                        else if (activity.ActivityType == "Curriculum")
-                                        {
-                                            <td style="text-align:center;"><a href="@Url.Action("DetailReport", "Reports", new { activityId = activity.ActivityId, cId="C" })" class="login" title="View Detail"><img src="~/assets/images/eye.png" /></a></td>
-                                        }
-                                        else
-                                        {
-                                            <td style="text-align:center;">-</td>
-                                        }
-                                    </tr>
-
-                                }
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td colspan="8" align="center">No Activity Available</td>
-                                </tr>
-                            }
-                        }
-                        else
-                        {
-                            <tr>
-                                <td colspan="8">No Activity Available</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
 </div>
 
 <script>
     $(document).ready(function () {
         $('#activityTable').DataTable({
-            "aaSorting": [[0, "desc"]],
+            "bPaginate": false,
+            "bLengthChange": false,
+            "aaSorting": [],
             "paging": true,
-            "ordering": true,
-            "info": true,
+            "ordering": false,
+            "info": false,
             "bFilter": true,
             "pageLength": 10,
             "pagingType": "simple_numbers",
@@ -162,18 +195,11 @@
                     aTargets: [-1]
                 }
             ]
-            //language: {
-            //    paginate: {
-            //        next: '&#8594;', // or '→'
-            //        previous: '&#8592;' // or '←'
-            //    }
-            //}
         });
 
         $('#activityTable_filter').hide();
 
         $('#txtSearch').on('keyup', function () {
-
             $.fn.dataTable.ext.search.push(function (settings, searchData) {
                 var term = $('#txtSearch').val().toLowerCase()
                 for (var i = 0; i < searchData.length; i++) {
@@ -186,6 +212,7 @@
             var table = $('#activityTable').DataTable();
             table.draw();
         });
+        $('.dataTables_paginate').css("float", "right");
     });
 
 

@@ -17,15 +17,15 @@
     }
 </style>
 <div class="container-fluid mt-4 mb-4 pl-4 pr-4">
-    <div class="row mb-1">
-        <div class="col">
-            <h4 class="title-color">Assigned Activities</h4>
-        </div>
-    </div>
-    <div class="pt-3 pl-3 pr-3 course-list-container list-box">
+    @*<div class="row mb-1">
+            <div class="col">
+                <h3 class="title-color"><b>Assigned Activities</b></h3>
+            </div>
+        </div>*@
+    <div class="pt-3 pl-3 pr-3 course-list-container list-box ">
         <div class="row">
             <div class="col search-container">
-                <i class="fas fa-search"></i>
+
                 <input class="form-control" type="text" id="txtSearch" placeholder="Search activity..." />
             </div>
             <div class="col text-right">
@@ -42,21 +42,21 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header card-header-primary">
-                                <h4 class="card-title ">My Learning</h4>
+                                <h4 class="card-title" style="font-weight:bold;">My Learning</h4>
                                 <p class="card-category">Curriculum, Courses, Forum, Quiz</p>
                             </div>
                             <div class="card-body" id="dvActivityData">
                                 <div class="table-responsive">
                                     <table class="table table-hover" id="activityTable">
-                                        <thead class="text-primary">
+                                        <thead>
                                             <tr>
-                                                <th scope="col">Learning</th>
-                                                <th scope="col">Type</th>
-                                                <th scope="col" class="mobile-hide">Duration (Mins)</th>
-                                                <th scope="col" class="mobile-hide">Start Date</th>
-                                                <th scope="col" class="mobile-hide">Attempted Date</th>
-                                                <th scope="col" class="mobile-hide" style="text-align:center;">Status</th>
-                                                <th scope="col" style="text-align:center;">Action</th>
+                                                <th style="font-weight:bold;" scope="col">Learning</th>
+                                                <th style="font-weight:bold;" scope="col">Type</th>
+                                                <th style="font-weight:bold;" scope="col" class="mobile-hide">Duration (Mins)</th>
+                                                <th style="font-weight:bold;" scope="col" class="mobile-hide">Start Date</th>
+                                                <th style="font-weight:bold;" scope="col" class="mobile-hide">Attempted Date</th>
+                                                <th style="font-weight:bold; text-align:center;" scope="col" class="mobile-hide">Status</th>
+                                                <th style="font-weight:bold; text-align:center;" scope="col">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -75,7 +75,7 @@
                                                             <td>@activity.ActivityType</td>
                                                             @if (activity.ActivityDuration == "0" || activity.ActivityDuration == "")
                                                             {
-                                                                <td class="mobile-hide add-column-padding">-</td>
+                                                                <td style="text-align:center;" class="mobile-hide add-column-padding">-</td>
                                                             }
                                                             else
                                                             {
@@ -91,12 +91,12 @@
                                                                     TimeSpan t = TimeSpan.FromSeconds(durationInSeconds);
                                                                     duration = string.Format("{0:D2}:{1:D2}", (int)t.Minutes, t.Seconds);
                                                                 }
-                                                                <td class="mobile-hide add-column-padding">@duration</td>
+                                                                <td style="text-align:center;" class="mobile-hide add-column-padding">@duration</td>
                                                             }
                                                             <td class="mobile-hide">@activity.ActivityStartDate</td>
                                                             @if (activity.ActivityCompletionDate == "")
                                                             {
-                                                                <td class="mobile-hide add-column-padding ">-</td>
+                                                                <td style="text-align:center;" class="mobile-hide add-column-padding ">-</td>
                                                             }
                                                             else
                                                             {
@@ -210,7 +210,7 @@
         </div>
     </div>
 </div>
-    <script>
+<script>
     $(document).ready(function () {
         $('#activityTable').DataTable({
             "bPaginate": false,
@@ -222,12 +222,6 @@
             "bFilter": true,
             "pageLength": 10,
             "pagingType": "simple_numbers",
-            //language: {
-            //    paginate: {
-            //        next: '&#8594;', // or '→'
-            //        previous: '&#8592;' // or '←'
-            //    }
-            //}
             aoColumnDefs: [
                 {
                     bSortable: false,
@@ -289,7 +283,7 @@
 
     }
 
-    function BindActivities(id,data) {        
+    function BindActivities(id,data) {
         var htmlStr = "<table border=\"2\" style=\"\" class=\"table\">";
         htmlStr += "<tr>"
         htmlStr += "<th scope=\"col\">Activity Name</th>";
@@ -382,19 +376,19 @@
 
     }
 
-    </script>
-    <style>
-        table.dataTable thead .sorting_asc {
-            background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
-        }
+</script>
+<style>
+    table.dataTable thead .sorting_asc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;
+    }
 
-        table.dataTable thead .sorting_desc {
-            background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
-        }
+    table.dataTable thead .sorting_desc {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;
+    }
 
-        table.dataTable thead .sorting {
-            background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
-        }
-    </style>
+    table.dataTable thead .sorting {
+        background: url("https://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;
+    }
+</style>
 
 

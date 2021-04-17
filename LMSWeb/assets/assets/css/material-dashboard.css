@@ -15459,10 +15459,12 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
   color: #fff;
 }
 
-.sidebar[data-color="purple"] li.active>a {
-  background-color: #9c27b0;
-  box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(156, 39, 176, 0.4);
-}
+    .sidebar[data-color="purple"] li.active > a {
+        background-color: #9c27b0;
+        box-shadow: 0 4px 20px 0px rgba(0, 0, 0, 0.14), 0 7px 10px -5px rgba(156, 39, 176, 0.4);
+        /*background-color: #130f40;
+        background-image: linear-gradient(315deg, #130f40 0%, #000000 74%);*/
+    }
 
 .sidebar[data-color="azure"] li.active>a {
   background-color: #00bcd4;

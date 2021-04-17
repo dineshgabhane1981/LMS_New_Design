@@ -1,7 +1,7 @@
 ﻿@model List<LMSWeb.ViewModel.CurriculumActivities>
 @{
     ViewBag.Title = "Curriculum";
-    Layout = "~/Views/Shared/_LayoutNew.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 
     LMSBL.DBModels.TblUser objUser = new LMSBL.DBModels.TblUser();
     objUser = (LMSBL.DBModels.TblUser)Session["UserSession"];
@@ -71,29 +71,162 @@
         var isAttempt = false;
         var durationInSeconds = 0;
         var duration = "0";
-        <div class="row mt-4">
-            @foreach (var activity in Model)
+<div class="row mt-4">
+    @foreach (var activity in Model)
+    {
+        if (!string.IsNullOrEmpty(activity.Duration) && activity.Duration != "0")
+        {
+            if (Convert.ToInt32(activity.Duration) >= 60)
             {
-                if (!string.IsNullOrEmpty(activity.Duration) && activity.Duration != "0")
+                duration = activity.Duration + ":00 Min";
+            }
+            else
+            {
+                durationInSeconds = Convert.ToInt32(activity.Duration) * 60;
+                TimeSpan t = TimeSpan.FromSeconds(durationInSeconds);
+                duration = string.Format("{0:D2}:{1:D2}", (int)t.Minutes, t.Seconds);
+                duration = duration + " Min";
+            }
+        }
+        else
+        {
+            duration = "-";
+        }
+
+        var activityURL = "#";
+        var classColor = "card-header-danger";
+        if (activity.ActivityStatus == "Completed")
+        {
+            classColor = "card-header-success";
+        }
+        if (activity.ActivityStatus == "InProgress")
+        {
+            classColor = "card-header-warning";
+        }
+
+        if (activity.ActivityType == "Course" && !isAttempt)
+        {
+            if (activity.CourseSubType == "Scorm1.2")
+            {
+                activityURL = Url.Action("LaunchCourse", "Assignment", new { CourseId = activity.ActivityId });
+                //<a href="@Url.Action("LaunchCourse", "Assignment", new { CourseId = activity.ActivityId })" class="login" title="Launch Course" target="_blank"><img src="~/assets/images/launch.png" width="35px;" /></a>
+            }
+            if (activity.CourseSubType == "Other")
+            {
+                activityURL = CourseOtherBaseURL + "\\ContentModules\\" + @activity.ActivityId + "" + @activity.CourseModuleURL;
+                //<a href="@CourseOtherBaseURL\ContentModules\@activity.ActivityId@activity.CourseModuleURL" class="login" title="Launch Course" target="_blank"><img src="~/assets/images/launch.png" width="35px;" /></a>
+            }
+        }
+        if (activity.ActivityType == "Survey" && !isAttempt)
+        {
+            activityURL = Url.Action("LaunchQuiz", "Assignment", new { QuizId = activity.ActivityId });
+            //<a href="@Url.Action("LaunchQuiz", "Assignment", new { QuizId = activity.ActivityId })" class="login" title="Launch Quiz"><img src="~/assets/images/launch.png" width="35px;" /></a>
+        }
+        if (activity.ActivityType == "Forum")
+        {
+            activityURL = Url.Action("PostComment", "Forum", new { forumId = activity.ActivityId });
+            //<a href="@Url.Action("PostComment", "Forum", new { forumId = activity.ActivityId })" class="login" title="Launch Curriculum"><img src="~/assets/images/eye.png" width="35px;" /></a>
+        }
+
+        if (activity.ActivityStatus == "Completed" && activity.ActivityType != "Forum")
+        {
+            isAttempt = false;
+        }
+        else
+        {
+            isAttempt = true;
+        }
+    <div class="col-lg-4 col-md-6 col-sm-6">
+        <a href="@activityURL">
+            <div class="card card-stats onhover">
+                @if (activity.ActivityType == "Course")
                 {
-                    if (Convert.ToInt32(activity.Duration) >= 60)
-                    {
-                        duration = activity.Duration + ":00 Min";
-                    }
-                    else
-                    {
-                        durationInSeconds = Convert.ToInt32(activity.Duration) * 60;
-                        TimeSpan t = TimeSpan.FromSeconds(durationInSeconds);
-                        duration = string.Format("{0:D2}:{1:D2}", (int)t.Minutes, t.Seconds);
-                        duration = duration + " Min";
-                    }
+                    <div class="card-header @classColor card-header-icon">
+                        <div class="card-icon" style="padding:3px !important;">
+                            <i class="material-icons">local_library</i>
+                        </div>
+                        <p class="card-category" style="font-weight:bold;">Course</p>
+                        <h4 class="card-title">
+                            @if (activity.ActivityStatus == "Completed")
+                            {
+                                <span style="color:green; font-weight:bold;"> @activity.ActivityStatus</span>
+                            }
+                            @if (activity.ActivityStatus == "Not Started")
+                            {
+                                <span style="color:red; font-weight:bold;"> @activity.ActivityStatus</span>
+                            }
+                            @if (activity.ActivityStatus == "InProgress")
+                            {
+                                <span style="color:orange; font-weight:bold;"> @activity.ActivityStatus</span>
+                            }
+
+                        </h4>
+                    </div>
                 }
-                else
+                @if (activity.ActivityType == "Survey")
                 {
-                    duration = "-";
+                    <div class="card-header @classColor card-header-icon">
+                        <div class="card-icon" style="padding:3px !important;">
+                            <i class="material-icons">quiz</i>
+                        </div>
+                        <p class="card-category" style="font-weight:bold;">Survey</p>
+                        <h4 class="card-title">
+                            @if (activity.ActivityStatus == "Completed")
+                            {
+                                <span style="color:green; font-weight:bold;"> @activity.ActivityStatus</span>
+                            }
+                            @if (activity.ActivityStatus == "Not Started")
+                            {
+                                <span style="color:red; font-weight:bold;"> @activity.ActivityStatus</span>
+                            }
+                            @if (activity.ActivityStatus == "InProgress")
+                            {
+                                <span style="color:orange; font-weight:bold;"> @activity.ActivityStatus</span>
+                            }
+
+                        </h4>
+                    </div>
+                }
+                @if (activity.ActivityType == "Forum")
+                {
+                    <div class="card-header card-header-success card-header-icon">
+                        <div class="card-icon" style="padding:3px !important;">
+                            <i class="material-icons">forum</i>
+                        </div>
+                        <p class="card-category" style="font-weight:bold;">Forum</p>
+                        <h4 class="card-title">                           
+                                <span style="color:green; font-weight:bold;"> InProgress</span>                            
+
+                        </h4>
+                    </div>
                 }
 
-                <div class="col-lg-4 col-md-4 col-sm-6 mt-3">
+                <div class="card-footer">
+                    <div class="stats" style="width:100%;">
+
+                        @if (activity.ActivityType != "Forum")
+                        {
+                            <div style="width:50%;">@activity.ActivityText</div>
+                            if (duration != "-")
+                            {
+                                <div style="width:50%; text-align:end;"><b>Duration</b> - @duration</div>
+                            }
+                            else
+                            {
+                                <div style="width:50%; text-align:end;"><b>Duration</b> - N/A</div>
+                            }
+                        }
+                        else
+                        {
+                            <div style="width:100%;">@activity.ActivityText</div>
+                        }
+                    </div>
+                </div>
+
+            </div>
+        </a>
+    </div>
+            @*<div class="col-lg-4 col-md-6 col-sm-6">
                     <div class="course-badge mt-4" style="border:1px solid gray;box-shadow:3px 3px 3px 3px lightgray;">
                         <div id="container" style="width:100%; height:150px;">
                             <img src="~/assets/BodyImages/5.jpeg" id="img1" style="width:100%; height:150px;" />
@@ -181,7 +314,7 @@
                         </div>
 
                     </div>
-                </div>
+                </div>*@
             }
         </div>
     }

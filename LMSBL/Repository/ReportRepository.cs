@@ -91,12 +91,14 @@ namespace LMSBL.Repository
                                     item.ActivityAttempts = "0";
                                 }
                                 if(!string.IsNullOrEmpty(dateAttempted))
-                                {
+                                {                                    
                                     item.ActivityAttemptedDate = dateAttempted;
                                 }
                             }
                         }
                     }
+                    item.ActivityAttemptedDate = item.ActivityAttemptedDate.Replace("AM", " AM");
+                    item.ActivityAttemptedDate = item.ActivityAttemptedDate.Replace("PM", " PM");
                 }
                 return mainRpt;
             }

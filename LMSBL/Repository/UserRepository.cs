@@ -34,22 +34,24 @@ namespace LMSBL.Repository
                     DOB = (Convert.ToString(dr["DOB"]) == null || Convert.ToString(dr["DOB"]) == "") ? nullDate : Convert.ToDateTime(dr["DOB"]),
                     ContactNo = Convert.ToString(dr["contactNo"]),
                     TenantId = Convert.ToInt32(dr["tenantId"]),
-                    //TenantName=Convert.ToString(dr["tenantName"]),
+                    TenantName=Convert.ToString(dr["tenantName"]),
                     RoleId = Convert.ToInt32(dr["roleId"]),
                     RoleName = Convert.ToInt32(dr["roleId"]) == 2 ? Roles.Admin.ToString() : Roles.Learner.ToString(),//Convert.ToString(dr["roleName"]),
                     IsActive = Convert.ToBoolean(dr["isActive"]),
                     CreatedBy = Convert.ToInt32(dr["createdBy"]),
                     CreatedOn = Convert.ToDateTime(dr["createdOn"]),
                     profileImage = Convert.ToString(dr["profileImage"]),
-                    //CRMClientId= Convert.ToString(dr["CRMClientId"])
+                    TenantURL= Convert.ToString(dr["tenantDomain"]),
+                    TenantLogo = Convert.ToString(dr["Logo"])
 
                 }).ToList();
                 return userDetails;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                newException.AddException(ex);
             }
+            return null;
         }
 
         public List<TblUser> GetAllUsers(int tenantId)

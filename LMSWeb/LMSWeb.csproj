@@ -752,6 +752,7 @@
     <Content Include="CSS\lib\style.css" />
     <Content Include="CSS\simple-sidebar.css" />
     <Content Include="CSS\style.css" />
+    <Content Include="CSS\stylenew.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

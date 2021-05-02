@@ -1,0 +1,36 @@
+﻿body {
+}
+
+.que-text {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.que-pagination li {
+    background-color: #d4d4d4;
+    border-radius: 13px;
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.12);
+}
+
+.que-pagination li {
+    text-decoration: none;
+    cursor: pointer;
+    padding: 1px 14px !important;
+    margin-bottom: 5px;
+}
+
+.que-pagination li.active-page {
+    color: #fff;
+}
+
+    .que-pagination li.active-page {
+        background-color: #9124a3;
+    }
+
+.add-padding{
+    padding-left:10px;
+}
+
+.radio-margin {
+    margin-right: 10px;
+}

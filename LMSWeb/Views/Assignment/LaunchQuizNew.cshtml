@@ -1,7 +1,7 @@
 ﻿@model LMSBL.DBModels.TblQuiz
 @{
     ViewBag.Title = "Launch Quiz";
-    Layout = "~/Views/Shared/_LayoutNew.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
     //Layout = null;
 }
 
@@ -9,11 +9,7 @@
 {
 
     <div class="container-fluid mt-4 mb-4 pl-4 pr-4">
-        <div class="row">
-            <div class="col">
-                <h4 class="mt-3 ml-2 mb-3"></h4>
-            </div>
-        </div>
+
 
         <div>
             @Html.HiddenFor(model => model.QuizId)
@@ -21,41 +17,48 @@
             @Html.HiddenFor(model => model.Duration)
             @Html.HiddenFor(model => model.hdnResponseData, new { @id = "hdnResponseData" })
             @Html.HiddenFor(model => model.hdnLaunchData, new { @id = "hdnLaunchData" })
-            <div class="container-fluid user-quiz-top-section mb-2 mt-3 p-2 list-box">
-                <div class="col-12">
-                    <h4>Quiz</h4>
-                </div>
-                <div class="col-12">
-                    Name: <span class="grey-color">@Model.QuizName</span>
-                    @if (Model.Duration != 0)
-                    {
-                        <div class="float-right"><div class="blue-color" id="showtime" style="margin-bottom:10px;">@Model.Duration</div></div>
-                    }
-                </div>
-                <div class="col-12">
-                    Description: <span class="grey-color">@Model.QuizDescription</span>
-                </div>
-            </div>
-            @*<div id="dvQuestions"></div>*@
-            <div id="dvQuestions"></div>
-            <div class="col mt-3">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <ul class="list-inline que-pagination" id="paginator-list">
-                        </ul>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12 text-right">
-
-                        <button type="button" id="btnPrev" class="btn btn-primary prev-btn"><i class="fas fa-chevron-left"></i> Prev</button>
-                        <button type="button" id="btnNext" class="btn btn-primary next-btn">Next <i class="fas fa-chevron-right"></i></button>
-                        <button type="submit" id="btnResponseSubmit" class="btn btn-primary prev-btn">Submit</button>
-                        <button type="button" id="btnCancel" class="btn btn-primary prev-btn">Cancel</button>
+            <div class="card">
+                <div class="card-body">
+                    <div class="container-fluid user-quiz-top-section mb-2 mt-3 p-2 list-box">
+                        <div class="col-12" style="font-weight:bold;">
+                            Quiz Title: <span class="grey-color">@Model.QuizName</span>
+                            @if (Model.Duration != 0)
+                            {
+                                <div class="float-right"><div class="blue-color" id="showtime" style="margin-bottom:10px;">@Model.Duration</div></div>
+                            }
+                        </div>
+                        @if (!string.IsNullOrEmpty(Model.QuizDescription))
+                        {
+                            <div class="col-12">
+                                <b>Description: </b><span class="grey-color">@Model.QuizDescription</span>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
+            <div class="card">
+                <div class="card-body">
+                    <div id="dvQuestions"></div>
+                    <div class="col mt-3">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <ul class="list-inline que-pagination" id="paginator-list">
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 text-right">
 
+                                <button type="button" id="btnPrev" class="btn btn-primary prev-btn"><i class="fas fa-chevron-left"></i> Prev</button>
+                                <button type="button" id="btnNext" class="btn btn-primary next-btn">Next <i class="fas fa-chevron-right"></i></button>
+                                <button type="submit" id="btnResponseSubmit" class="btn btn-primary prev-btn">Submit</button>
+                                <button type="button" id="btnCancel" class="btn btn-primary prev-btn">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
 }

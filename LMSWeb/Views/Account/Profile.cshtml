@@ -1,81 +1,110 @@
 ﻿@model LMSBL.DBModels.TblUser
 @{
     ViewBag.Title = "Profile";
-    Layout = "~/Views/Shared/_LayoutNew.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @using (Html.BeginForm("AddUser", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.UserId)
+    @Html.HiddenFor(model => model.RoleId)
+    @Html.HiddenFor(model => model.IsMyProfile)
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row" style="margin-top:50px;">
+                <div class="col-md-10">
+                    <div class="card">
+                        <div class="card-header card-header-primary">
+                            <h4 class="card-title">Edit Profile</h4>
+                            <p class="card-category">Complete your profile</p>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="row" style="margin-top:20px;">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">Email address</label>
+                                            @Html.TextBoxFor(model => model.EmailId, new { @class = "form-control", @readonly = "readonly" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">Fist Name</label>
+                                            @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
 
-    <div class="container-fluid mt-4 mb-4 pl-4 pr-4">
-        <div class="row">
-            <div class="col">
-                <h4 class="title-color">Profile</h4>
-            </div>
-        </div>
-        <div class="row profile-info-section" >
-            <div class="col-md-4 profile-image p-2 list-box">
-                <div class="row text-center h-100">
-                    <div class="col align-self-center">
-                        @if (!string.IsNullOrEmpty(Model.profileImage))
-                        {
-                            <img style="font-size: 150px" id="user_img" class="fas fa-user-circle mb-4" width="300" height="300" src="@Model.profileImage" />
-                        }
-                        else
-                        {
-                            <i class="fas fa-user-circle mb-4" style="font-size: 150px"></i>                            
-                        }
-                        <div>
-                            <div class="form-group col-6 pl-0">
-                                <input type="file" name="file" id="file" style="width: 50%;" onchange="show(this)" hidden />
-                            </div>
-                            <button type="button" id="btnProfilePic" class="btn btn-primary change-profile-btn"><i class="fas fa-camera"></i> Change Picture</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">Last Name</label>
+                                            @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">Date of Birth</label>
+                                            @Html.TextBoxFor(model => model.DOB, "{0:MM/dd/yyyy}", new { @class = "form-control datepicker", @id = "dtDOB", @readonly = "readonly", @autocomplete = "off" })
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">Contact No</label>
+                                            @Html.TextBoxFor(model => model.ContactNo, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">Current Password</label>
+                                            @Html.PasswordFor(model => model.OldPassword, new { @class = "form-control" })
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">New Password</label>
+                                            @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="bmd-label-floating">Confirm Password</label>
+                                            @Html.PasswordFor(model => model.ConfirmPassword, new { @class = "form-control" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary pull-right">Update Profile</button>
+                                <div class="clearfix"></div>
+                            </form>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-8 profile-details list-box" style="padding-left:20px;">
-                <div class="row pt-5 pl-4">
-                    <div class="col-sm-12 col-lg-6">
-                        <h4 class="mb-4">Personal Info</h4>
-                        @Html.HiddenFor(model => model.UserId)
-                        @Html.HiddenFor(model => model.RoleId)
-                        @Html.HiddenFor(model => model.IsMyProfile)
-                        @Html.TextBoxFor(model => model.FirstName, new { @class = "input100", placeholder = "First Name" })
-                        @Html.TextBoxFor(model => model.LastName, new { @class = "input100", placeholder = "Last Name" })
-                        @Html.TextBoxFor(model => model.EmailId, new { @class = "input100", @readonly = "readonly", placeholder = "Email Id" })
-                        @Html.TextBoxFor(model => model.DOB, "{0:MM/dd/yyyy}", new { @class = "input100 datepicker", @id = "dtDOB", @readonly = "readonly", @autocomplete = "off", placeholder = "Date of Birth" })
-                        @Html.TextBoxFor(model => model.ContactNo, new { @class = "input100", placeholder = "Contact No" })
 
-                    </div>
-                    <div class="col-sm-12 col-lg-6">
-                        <h4 class="mb-4">Password Settings</h4>
-                        @Html.PasswordFor(model => model.OldPassword, new { @class = "input100", placeholder = "Current Password" })
-                        @Html.PasswordFor(model => model.Password, new { @class = "input100", placeholder = "New Password" })
-                        @Html.PasswordFor(model => model.ConfirmPassword, new { @class = "input100", placeholder = "Confirm Password" })
-
-                    </div>
-                </div>
-                <div class="row justify-content-end pr-4">
-                    <button type="submit" id="btnUserSubmit" class="btn btn-primary profle-submit-btn mr-4"><img src="~/assets/images/check-img.png" /> Save Changes</button>
-                    <button type="submit" onclick="location.href='@Url.Action("Index", "Home")';return false;" class="btn btn-outline-primary cancel-btn"><i class="far fa-times-circle"></i> Cancel</button>
-                </div>
             </div>
         </div>
     </div>
+
 
 }
 
 <script src="~/assets/Validations.js"></script>
 
 <script type="text/javascript">
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('#dtDOB').datepicker({
             format: 'mm/dd/yyyy',
             showWeek: true
         });
-        $('#btnProfilePic').on("click", function() {
+        $('#btnProfilePic').on("click", function () {
             $('#file').click();
         });
 

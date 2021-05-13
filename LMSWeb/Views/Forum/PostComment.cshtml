@@ -27,57 +27,10 @@
             </div>
         </div>
         <br />
-
-
-
     </div>
-
-    @if (Model.lstReply != null)
-    {
-        if (Model.lstReply.Count > 0)
-        {
-            <div class="row justify-content-center h-100">
-                <div class="col   add-user-section ">
-                    <div style="margin-bottom:10px;"><b>Previous Comments -</b></div>
-                    @foreach (var item in Model.lstReply)
-                    {
-                        <div>
-                            <div>
-
-                                @if (!string.IsNullOrEmpty(item.ProfileImage))
-                                {
-                                    <div style="float:left;"> <img src="@item.ProfileImage" id="user_img" class="fas fa-user-circle mb-4" width="30" height="30" /></div>
-                                    <div style="margin-left:40px;">
-                                        <b> @item.UserName </b><br />
-                                        <i class="fa fa-clock-o" aria-hidden="true"></i> @item.CreatedDate
-                                    </div>
-
-                                }
-                                else
-                                {
-                                    <div style="float:left;">
-                                        <i class="fas fa-user-circle font24" width="30" height="30"></i>
-                                    </div>
-                                    <div style="margin-left:40px;">
-                                        <b> @item.UserName </b><br />
-                                        <i class="fa fa-clock-o" aria-hidden="true"></i> @item.CreatedDate
-                                    </div>
-                                }
-
-                            </div>
-
-                            <div>
-
-                                <div style="margin-left:40px;">@Html.Raw(item.ForumReply)</div>
-                            </div>
-                        </div>
-                        <hr />
-                    }
-                </div>
-            </div>
-        }
-    }
-
+    <div id="dvCommentList">
+        @Html.Partial("~/Views/Forum/_CommentList.cshtml", Model)
+    </div>
 
 </div>
 
@@ -87,7 +40,7 @@
     $(document).ready(function () {
         $('#txtReply').summernote({
             height: 200,
-            focus: true             
+            focus: true
         });
 
          $('#btnReplySubmit').on("click", function () {
@@ -98,42 +51,52 @@
      function AddReplyToDB() {
 
         if ($('#txtReply').val() == null || $("#txtReply").val() == "") {
-            swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Please enter your comment!'
-                })
+           toastr.error('Please enter your comment!');
         }
         else
         {
             var forumId = $('#ForumId').val();
-
             var replyText = $('#txtReply').val();
 
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("AddReply")',
                 data: '{forumId:' + JSON.stringify(forumId) + ',forumReply:' + JSON.stringify(replyText) + ' }',
-                //data: '{jsonData: ' + JSON.stringify(activities) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function (response) {
-                    console.log(response);
-                    swal.fire({
-                        icon: 'success',
-                        title: 'Saved',
-                        text: 'Comment posted Successfully!'
-                    })
+                    toastr.success('Comment posted Successfully!');
+                    $("#txtReply").summernote("reset");
+
+                    GetComments();
                 },
                 failure: function (response) {
-                    swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Something went Wrong!'
-                    })
+                    toastr.error('Something went Wrong!');
                 }
             });
         }
     }
 
+    function GetComments() {
+        var forumId = $('#ForumId').val();
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetComment")',
+                data: '{forumId:' + JSON.stringify(forumId) + '}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+            success: function (response) {
+                console.log(response);                
+                    $("dvCommentList").html(response);
+                },
+            failure: function (response) {                    
+                    toastr.error('Something went Wrong!');
+            },
+            error: function (response) {                
+                $("dvCommentList").hide();
+                $("dvCommentList").html('');
+                $("dvCommentList").html(response.responseText);
+            }
+          });
+    }
 </script>

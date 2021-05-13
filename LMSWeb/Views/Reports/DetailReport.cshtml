@@ -4,111 +4,120 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<style>
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        margin-right: 0px;
+        margin-left: 0px;
+    }
+</style>
+<div class="container-fluid mt-4 mb-4 pl-4 pr-4">
 
-<div class="container-fluid mt-4 mb-4 pl-4 pr-4" >
-    <div class="row mb-1">
-        <div class="col">
-            <h4 class="title-color">Detail Activity Report</h4>
-        </div>
-    </div>
-    <div class="pt-3 pl-3 pr-3 course-list-container list-box">
-        <div class="row">            
-            @*<div class="col search-container">
-                <i class="fas fa-search"></i>
-                <input class="search-box" type="text" id="txtSearch" placeholder="Search activity..." />
-            </div>*@
+    <div class="pt-3 pl-3 pr-3 course-list-container list-box">         
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header card-header-primary">
+                                <h4 class="card-title ">Detail Report</h4>
+                                <p class="card-category"><b style="font-weight:bold;"> Learning - </b>  @Model[0].ActivityName  <br /><b style="font-weight:bold;"> Type</b> - @Model[0].ActivityType</p>
+                            </div>
+                            <div class="row mt-3" id="dvActivityData">
+                                <div class="table-responsive">
+                                    <table class="table" id="activityTable">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" style="text-align:center;font-weight:bold;">Attempts</th>
+                                                <th scope="col"   class="mobile-hide" style="text-align:center; font-weight:bold;">Duration (Mins)</th>
+                                                <th scope="col"   class="mobile-hide" style="text-align:center; font-weight:bold;">Time Spent</th>
+                                                <th scope="col" style="font-weight:bold; text-align:center;" class="mobile-hide">Attempted Date</th>
+                                                <th scope="col" style="font-weight:bold; text-align:center;">Score</th>
+                                                <th scope="col" style="text-align:center;font-weight:bold;">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (Model != null)
+                                            {
 
-            <div class="col">
-                <b> Learning - </b> @Model[0].ActivityName <br /><b> Type</b> - @Model[0].ActivityType
+                                                if (Model.Count > 0)
+                                                {
+
+                                                    foreach (var activity in Model)
+                                                    {
+                                                        var score = "-";
+                                                        <tr>
+
+                                                            <td style="text-align:center;" class="add-column-padding"> @activity.ActivityAttempts</td>
+                                                            @if (activity.ActivityDuration == "0")
+                                                            {
+                                                                <td style="text-align:center;" class="mobile-hide add-column-padding">-</td>
+                                                            }
+                                                            else
+                                                            {
+                                                                var durationInSeconds = Convert.ToInt32(activity.ActivityDuration) * 60;
+                                                                TimeSpan t = TimeSpan.FromSeconds(durationInSeconds);
+                                                                var duration = string.Format("{0:D2}:{1:D2}", (int)t.Minutes, t.Seconds);
+                                                                <td class="mobile-hide add-column-padding" style="text-align:center;">@duration</td>
+                                                            }
+                                                            <td style="text-align:center;" class="mobile-hide add-column-padding">@activity.ActivityCompletionTime</td>
+                                                            @if (activity.ActivityAttemptedDate == "")
+                                                            {
+                                                                <td style="text-align:center;" class="mobile-hide add-column-padding">-</td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td style="text-align:center;" class="mobile-hide ">@activity.ActivityAttemptedDate</td>
+                                                            }
+
+
+                                                            @if (!string.IsNullOrEmpty(activity.ActivityScore))
+                                                            {
+                                                                score = Convert.ToString((Convert.ToInt32(activity.ActivityScore) * 100) / Convert.ToInt32(activity.ActivityQuestionCount)) + "%";
+                                                            }
+                                                            <td class="add-column-padding" style="text-align:center;">@score</td>
+
+                                                            <td style="text-align:center;"><a href="@Url.Action("AttemptReport", "Reports", new { activityId = activity.ActivityId, attempt = activity.ActivityAttempts  })" class="login" title="View Detail"><img src="~/assets/images/eye.png" /></a></td>
+                                                        </tr>
+
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <tr>
+                                                        <td colspan="8" align="center">No Activity Available</td>
+                                                    </tr>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td colspan="8">No Activity Available</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row mt-3" id="dvActivityData">
-            <div class="table-responsive">
-                <table class="table" id="activityTable">
-                    <thead>
-                        <tr>
-                            <th scope="col" >Attempts</th>
-                            <th scope="col" class="mobile-hide" >Duration (Mins)</th>
-                            <th scope="col"  class="mobile-hide" >Time Spent</th>
-                            <th scope="col" class="mobile-hide">Attempted Date</th>
-                            <th scope="col" >Score</th>
-                            <th scope="col" style="text-align:center;">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model != null)
-                        {
-
-                            if (Model.Count > 0)
-                            {
-
-                                foreach (var activity in Model)
-                                {
-                                    var score = "-";
-                                    <tr>
-
-                                        <td class="add-column-padding"> @activity.ActivityAttempts</td>
-                                        @if (activity.ActivityDuration == "0")
-                                        {
-                                            <td class="mobile-hide add-column-padding">-</td>
-                                        }
-                                        else
-                                        {
-                                            var durationInSeconds = Convert.ToInt32(activity.ActivityDuration) * 60;
-                                            TimeSpan t = TimeSpan.FromSeconds(durationInSeconds);
-                                            var duration = string.Format("{0:D2}:{1:D2}", (int)t.Minutes, t.Seconds);
-                                            <td class="mobile-hide add-column-padding">@duration</td>
-                                        }
-                                        <td class="mobile-hide add-column-padding" >@activity.ActivityCompletionTime</td>
-                                        @if (activity.ActivityAttemptedDate == "")
-                                        {
-                                            <td class="mobile-hide add-column-padding" >-</td>
-                                        }
-                                        else
-                                        {
-                                            <td class="mobile-hide " >@activity.ActivityAttemptedDate</td>
-                                        }
-
-
-                                        @if (!string.IsNullOrEmpty(activity.ActivityScore))
-                                        {
-                                            score = Convert.ToString((Convert.ToInt32(activity.ActivityScore) * 100) / Convert.ToInt32(activity.ActivityQuestionCount)) + "%";
-                                        }
-                                        <td class="add-column-padding">@score</td>
-
-                                        <td style="text-align:center;"><a href="@Url.Action("AttemptReport", "Reports", new { activityId = activity.ActivityId, attempt = activity.ActivityAttempts  })" class="login" title="View Detail"><img src="~/assets/images/eye.png" /></a></td>
-                                    </tr>
-
-                                }
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td colspan="8" align="center">No Activity Available</td>
-                                </tr>
-                            }
-                        }
-                        else
-                        {
-                            <tr>
-                                <td colspan="8">No Activity Available</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
     </div>
 </div>
 
 <script>
     $(document).ready(function () {
         $('#activityTable').DataTable({
-            "aaSorting": [[ 0, "desc" ]],
+            "bPaginate": false,
+            "bLengthChange": false,
+            "aaSorting": [],
             "paging": true,
-            "ordering": true,
-            "info": true,
+            "ordering": false,
+            "info": false,
             "bFilter": true,
             "pageLength": 10,
             "pagingType": "simple_numbers",
@@ -142,6 +151,7 @@
             var table = $('#activityTable').DataTable();
             table.draw();
         });
+        $('.dataTables_paginate').css("float", "right");
     });
 
 

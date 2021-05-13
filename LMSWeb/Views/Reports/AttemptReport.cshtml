@@ -1,7 +1,7 @@
 ﻿@model LMSBL.DBModels.TblQuiz
 @{
     ViewBag.Title = "Attempt Report";
-    Layout = "~/Views/Shared/_LayoutNew.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 
@@ -9,43 +9,40 @@
 {
 
     <div class="container-fluid mt-4 mb-4 pl-4 pr-4">
-        <div class="row" style="margin-left:60px;">
-            <div class="col">
-                <h4 class="title-color">Review Quiz</h4>
-            </div>
-        </div>
+        <div>
 
-        <div class="container" >
             @Html.HiddenFor(model => model.QuizId)
             @Html.HiddenFor(model => model.hdnResponseData, new { @id = "hdnResponseData" })
             @Html.HiddenFor(model => model.hdnReviewData, new { @id = "hdnReviewData" })
-            <div class="user-quiz-top-section mb-2 mt-3 p-2 list-box" >
-                <div class="col-12 mb-2">
-                   
-                    Name: <span class="grey-color">@Model.QuizName</span><br />
-                    Description: <span class="grey-color">@Model.QuizDescription</span>
-                    
-                </div>
-                <div class="col-12">
-                    @if (Model.Duration != 0)
-                    {
-                        var durationInSeconds = Convert.ToInt32(Model.Duration) * 60;
-                        TimeSpan t = TimeSpan.FromSeconds(durationInSeconds);
-                        var duration = string.Format("{0:D2}:{1:D2}", (int)t.Minutes, t.Seconds);
-                        <div id="showtime">Duration : <b>@duration </b>Mins. </div>
-                    }
-                    @*@if (Model.Score == 0)
-                    {*@
-                        <div  id="showtime" style="margin-bottom:10px;">Score: <b>@Model.Score</b></div>
-                    @*}
-                    else
-                    {
-                        var score = Convert.ToString((Convert.ToInt32(Model.Score) * 100) / Convert.ToInt32(Model.TblQuestions.Count)) + "%";
-                        <div class="blue-color" id="showtime" style="margin-bottom:10px;"><b>Score: @score</b></div>
-                    }*@
+            <div class="card">
+                <div class="card-body">
+                    <div class="col-12 mb-2 remove-padding">
+                        <div class="col-12 mb-2" style="font-weight:bold;">
+
+                            <u> Name</u>: <span class="grey-color">@Model.QuizName</span><br />
+                            <u>Description</u>: <span class="grey-color">@Model.QuizDescription</span>
+
+                        </div>
+                        <div class="col-12">
+                            @if (Model.Duration != 0)
+                            {
+                                var durationInSeconds = Convert.ToInt32(Model.Duration) * 60;
+                                TimeSpan t = TimeSpan.FromSeconds(durationInSeconds);
+                                var duration = string.Format("{0:D2}:{1:D2}", (int)t.Minutes, t.Seconds);
+                                <div id="showtime">Duration : <b>@duration </b>Mins. </div>
+                            }
+
+                            <div id="showtime" style="margin-bottom:10px; font-weight:bold;"><u>Score</u>: <b>@Model.Score</b></div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div id="dvQuestions"></div>
+            <div class="card">
+                <div class="card-body">
+                    <div id="dvQuestions"></div>
+                </div>
+            </div>
 
         </div>
     </div>

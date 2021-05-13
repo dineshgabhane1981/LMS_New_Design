@@ -135,7 +135,7 @@
     </div>
  
 
-    <script>
+<script>
         $(document).ready(function () {
             FilterResult("Total");
         });
@@ -143,11 +143,12 @@
             $("#divLoader").show();
             $.ajax({
                 type: "POST",
-                url: "/Home/GetFilteredData",
+                //url: "/Home/GetFilteredData",
+                url: '@Url.Action("GetFilteredData", "Home")',
                 data: '{status: "' + data + '" }',
                 contentType: "application/json; charset=utf-8",
                 dataType: "html",
-                success: function (response) {                    
+                success: function (response) {
                     $('#dvActivityData').html(response);
                     $("#divLoader").hide();
                 },
@@ -162,4 +163,4 @@
             });
 
         }
-    </script>
+</script>

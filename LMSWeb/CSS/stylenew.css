@@ -34,3 +34,8 @@
 .radio-margin {
     margin-right: 10px;
 }
+.dropdown-item {
+    font-size: 15px !important;
+    padding-right: 1.5rem !important;
+    padding-left: 1.5rem !important;
+}

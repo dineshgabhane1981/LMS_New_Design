@@ -5,8 +5,7 @@
 <div class="mt-5 pt-3 pl-3 pr-3 course-list-container list-box">
     <div class="row">
         <div class="col search-container">
-            <i class="fas fa-search"></i>
-            <input class="search-box" type="text" id="txtSearch" placeholder="Search User by name..." />
+            <input class="form-control" type="text" id="txtSearch" placeholder="Search User by name..." />
         </div>
         <div class="col text-right">
             <ul class="list-inline progress-list mt-2">
@@ -17,15 +16,7 @@
                         <button class="btn btn-secondary dropdown-toggle create-learning-btn" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-file-export"></i> Export
                         </button>
-                        <div class="dropdown-menu export-menu" aria-labelledby="dropdownMenuButton">
-                            @*<a class="dropdown-item" href="@Url.Action("ExportToExcel", "Reports", new {isActive=Context.Request.QueryString["isActive"]})">
-            <i class="fa fa-file-excel-o" aria-hidden="true"></i>
-            Excel
-        </a>*@
-                            @*<a class="dropdown-item" href="@Url.Action("ExportToPdf", "Reports", new {isActive=Context.Request.QueryString["isActive"]})">
-                                <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-                                PDF
-                            </a>*@
+                        <div class="dropdown-menu export-menu" aria-labelledby="dropdownMenuButton">                            
                             <span class="dropdown-item" onclick='ExportDataByDateInExcel();'>
                                 <i class="fa fa-file-excel-o" aria-hidden="true"></i>
                                 Excel

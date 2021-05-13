@@ -124,6 +124,16 @@ namespace LMSWeb.Controllers
 
         }
 
+        public ActionResult GetComment(int forumId)
+        {
+            tblForumReply objForumReply = new tblForumReply();
+            TblUser sessionUser = (TblUser)Session["UserSession"];
+            var lstReply = fr.GetForumReplyForLearner(forumId, sessionUser.UserId);
+            objForumReply.lstReply = lstReply;
+            return PartialView("_CommentList",objForumReply);
+
+        }
+
         public ActionResult ForumReport(int forumId)
         {
             tblForumReply objForumReply = new tblForumReply();

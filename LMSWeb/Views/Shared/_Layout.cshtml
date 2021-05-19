@@ -21,15 +21,14 @@
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link href="../assets/assets/demo/demo.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/CSS/stylenew.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css" />
 
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js" defer></script>
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.15/dist/summernote.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
-
-
-
 
     <style>
         #loader {
@@ -106,7 +105,11 @@
 
 
     <div class="wrapper ">
-
+        <div id="divLoader" style="display:none;">
+            <div id="loader">
+                <div class="loader-inner"></div>
+            </div>
+        </div>
         @Html.Partial("~/Views/Shared/_SideBar.cshtml")
 
         <div class="main-panel">
@@ -114,6 +117,7 @@
             @Html.Partial("~/Views/Shared/_Header.cshtml")
 
             <div class="content" style="margin-top:0px !important;">
+
                 @RenderBody()
             </div>
 

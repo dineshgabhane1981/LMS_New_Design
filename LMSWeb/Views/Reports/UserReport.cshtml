@@ -5,65 +5,81 @@
 }
 
 <div class="container-fluid mt-4 mb-4 pl-4 pr-4">
-    <div class="row user-quiz-top-section mb-2 mt-3 p-2 user-report list-box">
-        <div class="content">
-            <div class="card">
-                <div class="col-md-12">                    
-                    <div class="float-right">
-                        <div class="grey-color" style="margin-top:10px;display:flex;">
-                            Date Created: &nbsp;&nbsp;
-                            <input class="form-control datepicker" type="text" id="fDate" readonly name="fDate" placeholder="Select From Date">&nbsp;&nbsp;
-                            <input class="form-control datepicker" type="text" id="tDate" readonly name="tDate" placeholder="Select To Date">&nbsp;&nbsp;
-                            <button type="submit" id="btnFilter" class="btn btn-primary mr-4" onclick="FilterResult();"><img src="~/assets/images/check-img.png" width="20" height="20" /> Apply</button>
+    <div class="row user-quiz-top-section mt-3 p-2 user-report list-box">
+        <div class="col-md-4">
+        </div>
+        <div class="col-md-8">
+            <div class="content">
+                <div class="card">
+                    <div class="col-md-12">
+                        <div class="float-right">
+                            <div class="grey-color" style="margin-top:10px;display:flex;">
+                                <label style="padding-top:10px; font-weight:bold; ">
+                                    Date Created:
+                                </label> &nbsp;&nbsp;
+                                <input class="form-control datepicker" type="text" id="fDate" name="fDate" placeholder="From Date">&nbsp;&nbsp;
+                                <input class="form-control datepicker" type="text" id="tDate" name="tDate" placeholder="To Date">&nbsp;&nbsp;
+                                <button type="button" id="btnFilter" class="btn btn-primary mr-4" style="height:38px;">Apply</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="container-fluid mt-4 mb-4 pl-4 pr-4" id="dvActivityData">
+    <div class="container-fluid mb-4" id="dvActivityData">
         @Html.Partial("~/Views/Reports/_UserReportList.cshtml", Model)
-
     </div>
 </div>
 
 <script>
-    $(document).ready(function () {
-
-        $('#fDate').datepicker({
-            format: 'mm/dd/yyyy',
-            showWeek: true
+    $(document).ready(function () {        
+        $('#fDate').datetimepicker({
+            format: 'DD/MM/YYYY'
         });
+        $('#tDate').datetimepicker({
+            format: 'DD/MM/YYYY'
+        });      
 
-        $('#tDate').datepicker({
-            format: 'mm/dd/yyyy',
-            showWeek: true
+        $('#btnFilter').on("click", function () {
+            FilterResult();
         });
     });
-
+    function urlParam(name) {        
+        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        if (results == null) {
+            return null;
+        }
+        return decodeURI(results[1]) || 0;
+    }
     function FilterResult() {
         var params = new URLSearchParams(window.location.search);
-        var isActive = params.get('isActive');
+        var isActive = urlParam('IsActive');
         var fDate = $('#fDate').val();
-        var tDate = $('#tDate').val();
-
+        var tDate = $('#tDate').val();       
+        
+        $("#divLoader").show();
+        
         $.ajax({
             type: "POST",
-            url: "/Reports/GetFilteredData",
+            url: '@Url.Action("GetFilteredData", "Reports")',
             data: '{isActive: "' + isActive + '",fDate: "' + fDate + '",tDate: "' + tDate + '",ReportName: "UserReport" }',
             contentType: "application/json; charset=utf-8",
             dataType: "html",
             success: function (response) {
-                console.log(response);
                 $('#dvActivityData').html(response);
+                $("#divLoader").hide();
             },
             failure: function (response) {
                 console.log(response);
+                $("#divLoader").hide();
             },
             error: function (response) {
                 console.log(response);
+                $("#divLoader").hide();
             }
         });
+        $("#divLoader").hide();
     }
-
+    
 </script>

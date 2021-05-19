@@ -19,7 +19,7 @@
     .modal {
         display: none; /* Hidden by default */
         position: fixed; /* Stay in place */
-        z-index: 1; /* Sit on top */
+        z-index: 5 !important; /* Sit on top */
         padding-top: 100px; /* Location of the box */
         left: 0;
         top: 0;
@@ -260,10 +260,9 @@
         });
         $('.dataTables_paginate').css("float", "right");
 
-        $('#dtDueDate').datepicker({
-            format: 'mm/dd/yyyy',
-            showWeek: true
-        }).datepicker("setDate", new Date());
+        $('#dtDueDate').datetimepicker({
+            format: 'DD/MM/YYYY'
+        });//.datetimepicker("setDate", new Date());
 
         DrawTable();
 
@@ -366,7 +365,7 @@
                 }
             });
 
-        $("#dtDueDate").datepicker().datepicker("setDate", new Date());
+        $("#dtDueDate").datetimepicker();//.datetimepicker("setDate", new Date());
        $("#myModal").show(1000);
           //modal.style.display = "block";
     }

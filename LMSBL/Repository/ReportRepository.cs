@@ -161,7 +161,7 @@ namespace LMSBL.Repository
                     PhoneNo = Convert.ToString(dr["contactNo"]),
                     LearningAssigned = Convert.ToString(dr["assigned"]),
                     isActive = Convert.ToBoolean(dr["isActive"]),
-                    DateCreated = Convert.ToString(dr["createdOn"]),
+                    DateCreated = Convert.ToDateTime(dr["createdOn"]).ToString("dd/MM/yyyy"),
                     LastLogin = Convert.ToString(dr["LastLogin"])                   
 
 
@@ -266,7 +266,7 @@ namespace LMSBL.Repository
                 {
                     FullName = Convert.ToString(dr["FullName"]),
                     CompletionDate = Convert.ToString(dr["CompletionDate"]),
-                    DueDate = Convert.ToString(dr["DueDate"]),
+                    DueDate = string.IsNullOrEmpty(Convert.ToString(dr["DueDate"])) ? "" : Convert.ToDateTime(dr["DueDate"]).ToString("MM/dd/yyyy"),
                     ActivityDuration = Convert.ToString(dr["ActivityDuration"]),
                     ActivityStatus = Convert.ToString(dr["ActivityStatus"]),
                     TimeSpent = Convert.ToString(dr["TimeSpent"]),

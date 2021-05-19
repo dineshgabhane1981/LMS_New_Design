@@ -18,6 +18,7 @@ namespace LMSBL.DBModels
         public string DateCreated { get; set; }
         public string LastLogin { get; set; }
         public string ActivityLearningAssigned { get; set; }
+        public DateTime? dateForFilter { get; set; }
 
 
     }
@@ -36,6 +37,7 @@ namespace LMSBL.DBModels
         public string Duration { get; set; }
         public string CompletionTime { get; set; }
         public string ActivityLearningAssigned { get; set; }
+        public DateTime? dateForFilter { get; set; }
 
         public UserReportModel userReportModel { get; set; }
 
@@ -49,7 +51,8 @@ namespace LMSBL.DBModels
         public string ActivityType { get; set; }
         public string ActivityDescription { get; set; }
         public string ActivityUserCount { get; set; }
-        public string ActivityLearningAssigned { get; set; }        
+        public string ActivityLearningAssigned { get; set; }
+        public DateTime? dateForFilter { get; set; }
     }
 
     public class LearningCompletionProgressReportModel
@@ -64,6 +67,7 @@ namespace LMSBL.DBModels
         public string Rating { get; set; }
         public string Comments { get; set; }
         public string ActivityLearningAssigned { get; set; }
+        public DateTime? dateForFilter { get; set; }
         public LearningCompletionReportModel learningCompletionReportModel { get; set; }
     }
 

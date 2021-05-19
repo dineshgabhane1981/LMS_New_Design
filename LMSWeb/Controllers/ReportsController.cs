@@ -17,7 +17,7 @@ using iTextSharp.text.html.simpleparser;
 using ClosedXML.Excel;
 using System.IO;
 using System.ComponentModel.DataAnnotations;
-
+using System.Globalization;
 
 namespace LMSWeb.Controllers
 {
@@ -224,7 +224,16 @@ namespace LMSWeb.Controllers
         {
             try
             {
-               // string fDate, string tDate,
+                if (!string.IsNullOrEmpty(fDate))
+                {
+                    fDate = DateTime.ParseExact(fDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+                }
+                if (!string.IsNullOrEmpty(tDate))
+                {
+                    tDate = DateTime.ParseExact(tDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+                }
                 TblUser sessionUser = (TblUser)Session["UserSession"];
                 
                 System.Data.DataTable table = new System.Data.DataTable();
@@ -243,17 +252,26 @@ namespace LMSWeb.Controllers
                         //excelSheet.Name = "Total User Report";
                         ReportName = "Total User Report";
                     }
+                    foreach (var item in objUserList)
+                    {
+                        if (!string.IsNullOrEmpty(item.DateCreated))
+                        {
+                            var datenew = DateTime.ParseExact(item.DateCreated, "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                            .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+                            item.dateForFilter = Convert.ToDateTime(datenew);
+                        }
+                    }
                     if (!string.IsNullOrEmpty(fDate) && !string.IsNullOrEmpty(tDate))
                     {
-                        objUserList = objUserList.Where(x => x.DateCreated != "" && (Convert.ToDateTime(x.DateCreated) >= Convert.ToDateTime(fDate) && Convert.ToDateTime(x.DateCreated) <= Convert.ToDateTime(tDate))).ToList();
+                        objUserList = objUserList.Where(x => x.dateForFilter != null && x.dateForFilter >= Convert.ToDateTime(fDate) && x.dateForFilter <= Convert.ToDateTime(tDate)).ToList();
                     }
                     else if (!string.IsNullOrEmpty(fDate))
                     {
-                        objUserList = objUserList.Where(x => x.DateCreated != "" && Convert.ToDateTime(x.DateCreated) >= Convert.ToDateTime(fDate)).ToList();
+                        objUserList = objUserList.Where(x => x.DateCreated != "" && x.dateForFilter >= Convert.ToDateTime(fDate)).ToList();
                     }
                     else if (!string.IsNullOrEmpty(tDate))
                     {
-                        objUserList = objUserList.Where(x => x.DateCreated != "" && Convert.ToDateTime(x.DateCreated) <= Convert.ToDateTime(tDate)).ToList();
+                        objUserList = objUserList.Where(x => x.DateCreated != "" && x.dateForFilter <= Convert.ToDateTime(tDate)).ToList();
                     }
 
                     PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(UserReportModel));
@@ -270,23 +288,32 @@ namespace LMSWeb.Controllers
                     }
                     table.Columns.Remove("UserId");
                     table.Columns.Remove("ActivityLearningAssigned");
-                    
+                    table.Columns.Remove("dateForFilter");
+
                 }
                 if (ReportName == "User Progress Report")
                 {
                     List<UserProgressReportModel> objUserList = new List<UserProgressReportModel>();
                     objUserList = rpt.GetUserProgressReportForAdmin(sessionUser.TenantId, Convert.ToInt32(UserId));
+                    foreach (var item in objUserList)
+                    {
+                        if (!string.IsNullOrEmpty(item.AttemptedOn))
+                        {                           
+                            item.dateForFilter = Convert.ToDateTime(item.AttemptedOn);
+                        }
+                    }
+
                     if (!string.IsNullOrEmpty(fDate) && !string.IsNullOrEmpty(tDate))
                     {
-                        objUserList = objUserList.Where(x => x.AttemptedOn != "" && (Convert.ToDateTime(x.AttemptedOn) >= Convert.ToDateTime(fDate) && Convert.ToDateTime(x.AttemptedOn) <= Convert.ToDateTime(tDate))).ToList();
+                        objUserList = objUserList.Where(x => x.dateForFilter != null && x.dateForFilter >= Convert.ToDateTime(fDate) && x.dateForFilter <= Convert.ToDateTime(tDate)).ToList();
                     }
                     else if (!string.IsNullOrEmpty(fDate))
                     {
-                        objUserList = objUserList.Where(x => x.AttemptedOn != "" && Convert.ToDateTime(x.AttemptedOn) >= Convert.ToDateTime(fDate)).ToList();
+                        objUserList = objUserList.Where(x => x.dateForFilter != null && x.dateForFilter >= Convert.ToDateTime(fDate)).ToList();
                     }
                     else if (!string.IsNullOrEmpty(tDate))
                     {
-                        objUserList = objUserList.Where(x => x.AttemptedOn != "" && Convert.ToDateTime(x.AttemptedOn) <= Convert.ToDateTime(tDate)).ToList();
+                        objUserList = objUserList.Where(x => x.dateForFilter != null && x.dateForFilter <= Convert.ToDateTime(tDate)).ToList();
                     }
 
                     PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(UserProgressReportModel));
@@ -313,6 +340,7 @@ namespace LMSWeb.Controllers
                     table.Columns.Remove("ActivityId");
                     table.Columns.Remove("QuestionCount");
                     table.Columns.Remove("ActivityLearningAssigned");
+                    table.Columns.Remove("dateForFilter");
                     foreach (DataRow dr in table.Rows)
                     {
                         if (!string.IsNullOrEmpty(Convert.ToString(dr["Comments"])))
@@ -326,17 +354,24 @@ namespace LMSWeb.Controllers
                     List<LearningCompletionReportModel> objUserList = new List<LearningCompletionReportModel>();
                     objUserList = rpt.GetLearningCompletionReportForAdmin(sessionUser.TenantId);
 
+                    foreach (var item in objUserList)
+                    {
+                        if (!string.IsNullOrEmpty(item.ActivityLearningAssigned))
+                        {                            
+                            item.dateForFilter = Convert.ToDateTime(item.ActivityLearningAssigned);
+                        }
+                    }
                     if (!string.IsNullOrEmpty(fDate) && !string.IsNullOrEmpty(tDate))
                     {
-                        objUserList = objUserList.Where(x => x.ActivityLearningAssigned != "" && (Convert.ToDateTime(x.ActivityLearningAssigned) >= Convert.ToDateTime(fDate) && Convert.ToDateTime(x.ActivityLearningAssigned) <= Convert.ToDateTime(tDate))).ToList();
+                        objUserList = objUserList.Where(x => x.dateForFilter != null && x.dateForFilter >= Convert.ToDateTime(fDate) && x.dateForFilter <= Convert.ToDateTime(tDate)).ToList();
                     }
                     else if (!string.IsNullOrEmpty(fDate))
                     {
-                        objUserList = objUserList.Where(x => x.ActivityLearningAssigned != "" && Convert.ToDateTime(x.ActivityLearningAssigned) >= Convert.ToDateTime(fDate)).ToList();
+                        objUserList = objUserList.Where(x => x.dateForFilter != null && x.dateForFilter >= Convert.ToDateTime(fDate)).ToList();
                     }
                     else if (!string.IsNullOrEmpty(tDate))
                     {
-                        objUserList = objUserList.Where(x => x.ActivityLearningAssigned != "" && Convert.ToDateTime(x.ActivityLearningAssigned) <= Convert.ToDateTime(tDate)).ToList();
+                        objUserList = objUserList.Where(x => x.dateForFilter != null && x.dateForFilter <= Convert.ToDateTime(tDate)).ToList();
                     }
 
                     PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(LearningCompletionReportModel));
@@ -353,25 +388,33 @@ namespace LMSWeb.Controllers
                     }
                     table.Columns.Remove("ActivityId");
                     table.Columns.Remove("ActivityDescription");
+                    table.Columns.Remove("dateForFilter");
                 }
                 if (ReportName == "Learning Progress Report")
                 {
                     List<LearningCompletionProgressReportModel> objUserList = new List<LearningCompletionProgressReportModel>();
                     objUserList = rpt.GetLearningCompletionProgressReportForAdmin(sessionUser.TenantId, Convert.ToInt32(ActivityId), Type);
 
+                    foreach (var item in objUserList)
+                    {
+                        if (!string.IsNullOrEmpty(item.CompletionDate))
+                        {
+                            item.dateForFilter = Convert.ToDateTime(item.CompletionDate);
+                        }
+                    }
+
                     if (!string.IsNullOrEmpty(fDate) && !string.IsNullOrEmpty(tDate))
                     {
-                        objUserList = objUserList.Where(x => x.CompletionDate != "" && (Convert.ToDateTime(x.CompletionDate) >= Convert.ToDateTime(fDate) && Convert.ToDateTime(x.CompletionDate) <= Convert.ToDateTime(tDate))).ToList();
+                        objUserList = objUserList.Where(x => x.dateForFilter != null && x.dateForFilter >= Convert.ToDateTime(fDate) && x.dateForFilter <= Convert.ToDateTime(tDate)).ToList();
                     }
                     else if (!string.IsNullOrEmpty(fDate))
                     {
-                        objUserList = objUserList.Where(x => x.CompletionDate != "" && Convert.ToDateTime(x.CompletionDate) >= Convert.ToDateTime(fDate)).ToList();
+                        objUserList = objUserList.Where(x => x.dateForFilter != null && x.dateForFilter >= Convert.ToDateTime(fDate)).ToList();
                     }
                     else if (!string.IsNullOrEmpty(tDate))
                     {
-                        objUserList = objUserList.Where(x => x.CompletionDate != "" && Convert.ToDateTime(x.CompletionDate) <= Convert.ToDateTime(tDate)).ToList();
+                        objUserList = objUserList.Where(x => x.dateForFilter != null && x.dateForFilter <= Convert.ToDateTime(tDate)).ToList();
                     }
-
 
                     PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(LearningCompletionProgressReportModel));
                     foreach (PropertyDescriptor prop in properties)
@@ -404,6 +447,7 @@ namespace LMSWeb.Controllers
                     }
                    // table.Columns.Remove("ActivityDescription");
                     table.Columns.Remove("ActivityLearningAssigned");
+                    table.Columns.Remove("dateForFilter");
 
                 }
                 if (ReportName == "High Score Users Report")
@@ -741,21 +785,42 @@ namespace LMSWeb.Controllers
         public ActionResult GetFilteredData(string isActive, string fDate, string tDate, string ReportName, string UserId, string ActivityId, string type)
         {
             TblUser sessionUser = (TblUser)Session["UserSession"];
+            if (!string.IsNullOrEmpty(fDate))
+            {
+                fDate = DateTime.ParseExact(fDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                    .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+            }
+            if (!string.IsNullOrEmpty(tDate))
+            {
+                tDate = DateTime.ParseExact(tDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                    .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+            }
             if (ReportName == "UserReport")
             {
                 List<UserReportModel> objUserList = new List<UserReportModel>();
                 objUserList = rpt.GetUserReportForAdmin(sessionUser.TenantId, Convert.ToBoolean(isActive));
+                foreach (var item in objUserList)
+                {
+                    if (!string.IsNullOrEmpty(item.DateCreated))
+                    {
+                        var datenew = DateTime.ParseExact(item.DateCreated, "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                        .ToString("MM/dd/yyyy", CultureInfo.InvariantCulture);
+                        item.dateForFilter = Convert.ToDateTime(datenew);
+
+                    }
+                }
+
                 if (!string.IsNullOrEmpty(fDate) && !string.IsNullOrEmpty(tDate))
                 {
-                    objUserList = objUserList.Where(x => x.DateCreated != "" && Convert.ToDateTime(x.DateCreated) >= Convert.ToDateTime(fDate) && Convert.ToDateTime(x.DateCreated) <= Convert.ToDateTime(tDate)).ToList();
+                    objUserList = objUserList.Where(x => x.dateForFilter != null && x.dateForFilter >= Convert.ToDateTime(fDate) && x.dateForFilter <= Convert.ToDateTime(tDate)).ToList();
                 }
                 else if (!string.IsNullOrEmpty(fDate))
                 {
-                    objUserList = objUserList.Where(x => x.DateCreated != "" && Convert.ToDateTime(x.DateCreated) >= Convert.ToDateTime(fDate)).ToList();
+                    objUserList = objUserList.Where(x => x.DateCreated != "" && x.dateForFilter >= Convert.ToDateTime(fDate)).ToList();
                 }
                 else if (!string.IsNullOrEmpty(tDate))
                 {
-                    objUserList = objUserList.Where(x => x.DateCreated != "" && Convert.ToDateTime(x.DateCreated) <= Convert.ToDateTime(tDate)).ToList();
+                    objUserList = objUserList.Where(x => x.DateCreated != "" && x.dateForFilter <= Convert.ToDateTime(tDate)).ToList();
                 }
 
                 return PartialView("_UserReportList", objUserList);
@@ -764,18 +829,25 @@ namespace LMSWeb.Controllers
             {
                 List<UserProgressReportModel> objUserList = new List<UserProgressReportModel>();
                 objUserList = rpt.GetUserProgressReportForAdmin(sessionUser.TenantId, Convert.ToInt32(UserId));
+                foreach (var item in objUserList)
+                {
+                    if (!string.IsNullOrEmpty(item.AttemptedOn))
+                    {                       
+                        item.dateForFilter = Convert.ToDateTime(item.AttemptedOn);
+                    }
+                }
 
                 if (!string.IsNullOrEmpty(fDate) && !string.IsNullOrEmpty(tDate))
                 {
-                    objUserList = objUserList.Where(x => x.AttemptedOn != "" && (Convert.ToDateTime(x.AttemptedOn) >= Convert.ToDateTime(fDate) && Convert.ToDateTime(x.AttemptedOn) <= Convert.ToDateTime(tDate))).ToList();
+                    objUserList = objUserList.Where(x => x.dateForFilter != null && x.dateForFilter >= Convert.ToDateTime(fDate) && x.dateForFilter <= Convert.ToDateTime(tDate)).ToList();
                 }
                 else if (!string.IsNullOrEmpty(fDate))
                 {
-                    objUserList = objUserList.Where(x => x.AttemptedOn != "" && Convert.ToDateTime(x.AttemptedOn) >= Convert.ToDateTime(fDate)).ToList();
+                    objUserList = objUserList.Where(x => x.dateForFilter != null && x.dateForFilter >= Convert.ToDateTime(fDate)).ToList();
                 }
                 else if (!string.IsNullOrEmpty(tDate))
                 {
-                    objUserList = objUserList.Where(x => x.AttemptedOn != "" && Convert.ToDateTime(x.AttemptedOn) <= Convert.ToDateTime(tDate)).ToList();
+                    objUserList = objUserList.Where(x => x.dateForFilter != null && x.dateForFilter  <= Convert.ToDateTime(tDate)).ToList();
                 }
                 return PartialView("_UserProgressReportList", objUserList);
             }
@@ -783,18 +855,24 @@ namespace LMSWeb.Controllers
             {
                 List<LearningCompletionReportModel> objUserList = new List<LearningCompletionReportModel>();
                 objUserList = rpt.GetLearningCompletionReportForAdmin(sessionUser.TenantId);
-
+                foreach (var item in objUserList)
+                {
+                    if (!string.IsNullOrEmpty(item.ActivityLearningAssigned))
+                    {                        
+                        item.dateForFilter = Convert.ToDateTime(item.ActivityLearningAssigned);
+                    }
+                }
                 if (!string.IsNullOrEmpty(fDate) && !string.IsNullOrEmpty(tDate))
                 {
-                    objUserList = objUserList.Where(x => x.ActivityLearningAssigned != "" && (Convert.ToDateTime(x.ActivityLearningAssigned) >= Convert.ToDateTime(fDate) && Convert.ToDateTime(x.ActivityLearningAssigned) <= Convert.ToDateTime(tDate))).ToList();
+                    objUserList = objUserList.Where(x => x.dateForFilter != null && x.dateForFilter >= Convert.ToDateTime(fDate) && x.dateForFilter <= Convert.ToDateTime(tDate)).ToList();
                 }
                 else if (!string.IsNullOrEmpty(fDate))
                 {
-                    objUserList = objUserList.Where(x => x.ActivityLearningAssigned != "" && Convert.ToDateTime(x.ActivityLearningAssigned) >= Convert.ToDateTime(fDate)).ToList();
+                    objUserList = objUserList.Where(x => x.dateForFilter != null && x.dateForFilter >= Convert.ToDateTime(fDate)).ToList();
                 }
                 else if (!string.IsNullOrEmpty(tDate))
                 {
-                    objUserList = objUserList.Where(x => x.ActivityLearningAssigned != "" && Convert.ToDateTime(x.ActivityLearningAssigned) <= Convert.ToDateTime(tDate)).ToList();
+                    objUserList = objUserList.Where(x => x.dateForFilter != null && x.dateForFilter <= Convert.ToDateTime(tDate)).ToList();
                 }
 
                 return PartialView("_LearningCompletionReportList", objUserList);
@@ -803,17 +881,26 @@ namespace LMSWeb.Controllers
             {
                 List<LearningCompletionProgressReportModel> objUserList = new List<LearningCompletionProgressReportModel>();
                 objUserList = rpt.GetLearningCompletionProgressReportForAdmin(sessionUser.TenantId, Convert.ToInt32(ActivityId), type);
+
+                foreach (var item in objUserList)
+                {
+                    if (!string.IsNullOrEmpty(item.CompletionDate))
+                    {
+                        item.dateForFilter = Convert.ToDateTime(item.CompletionDate);
+                    }
+                }
+
                 if (!string.IsNullOrEmpty(fDate) && !string.IsNullOrEmpty(tDate))
                 {
-                    objUserList = objUserList.Where(x => x.CompletionDate != "" && (Convert.ToDateTime(x.CompletionDate) >= Convert.ToDateTime(fDate) && Convert.ToDateTime(x.CompletionDate) <= Convert.ToDateTime(tDate))).ToList();
+                    objUserList = objUserList.Where(x => x.dateForFilter != null && x.dateForFilter >= Convert.ToDateTime(fDate) && x.dateForFilter <= Convert.ToDateTime(tDate)).ToList();
                 }
                 else if (!string.IsNullOrEmpty(fDate))
                 {
-                    objUserList = objUserList.Where(x => x.CompletionDate != "" && Convert.ToDateTime(x.CompletionDate) >= Convert.ToDateTime(fDate)).ToList();
+                    objUserList = objUserList.Where(x => x.dateForFilter != null && x.dateForFilter >= Convert.ToDateTime(fDate)).ToList();
                 }
                 else if (!string.IsNullOrEmpty(tDate))
                 {
-                    objUserList = objUserList.Where(x => x.CompletionDate != "" && Convert.ToDateTime(x.CompletionDate) <= Convert.ToDateTime(tDate)).ToList();
+                    objUserList = objUserList.Where(x => x.dateForFilter != null && x.dateForFilter <= Convert.ToDateTime(tDate)).ToList();
                 }
 
                 return PartialView("_LearningProgressReportList", objUserList);

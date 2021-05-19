@@ -747,6 +747,7 @@
     <Content Include="CSS\fontawesome\webfonts\fa-regular-400.svg" />
     <Content Include="CSS\fontawesome\webfonts\fa-solid-900.html" />
     <Content Include="CSS\fontawesome\webfonts\fa-solid-900.svg" />
+    <Content Include="CSS\jquery-ui.css" />
     <Content Include="CSS\jquery-ui.min.css" />
     <Content Include="CSS\lib\styleold.css" />
     <Content Include="CSS\lib\style.css" />
@@ -1218,6 +1219,8 @@
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui-1.12.1.js" />
+    <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
     <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />

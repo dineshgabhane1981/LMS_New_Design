@@ -83,13 +83,13 @@ else if (model.RoleId == 2)
                 <p style="font-size:18px; font-weight:bold;">Curriculum</p>
             </a>
         </li>
-        <li class="nav-item @Html.IsSelected(controller: "Reports", action: "UserReport")  ">
+        <li class="nav-item @Html.IsSelected(controller: "Reports", action: "UserReport,UserProgressReport,DetailReport,AttemptReport")  ">
             <a class="nav-link" href="@Url.Action("UserReport", "Reports", new { IsActive = "False",})">
                 <i class="material-icons">recent_actors</i>
                 <p style="font-size:18px; font-weight:bold;">User Report</p>
             </a>
         </li>
-        <li class="nav-item @Html.IsSelected(controller: "Reports", action: "LearningCompletionReport")  ">
+        <li class="nav-item @Html.IsSelected(controller: "Reports", action: "LearningCompletionReport,LearningProgressCompletionReport")  ">
             <a class="nav-link" href="@Url.Action("LearningCompletionReport", "Reports")">
                 <i class="material-icons">fact_check</i>
                 <p style="font-size:18px; font-weight:bold;">Completion Report</p>

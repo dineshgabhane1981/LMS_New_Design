@@ -30,7 +30,7 @@ namespace LMSBL.Common
                     tbluser.profileImage = Convert.ToString(ds.Tables[0].Rows[0]["profileImage"]);
                     tbluser.TenantURL = Convert.ToString(ds.Tables[0].Rows[0]["tenantDomain"]);
                     tbluser.TenantLogo = Convert.ToString(ds.Tables[0].Rows[0]["Logo"]);
-                    //tbluser.CRMClientId = Convert.ToString(ds.Tables[0].Rows[0]["CRMClientId"]);
+                    tbluser.TenantName = Convert.ToString(ds.Tables[0].Rows[0]["tenantName"]);
                     //tbluser.isLMS = Convert.ToBoolean(ds.Tables[0].Rows[0]["isLMS"]);
                 }
             }
